@@ -13,6 +13,7 @@ export interface IUser extends Document {
     followers: Schema.Types.ObjectId[];
     following: Schema.Types.ObjectId[];
     liked: Schema.Types.ObjectId[];
+    role: 'ADMIN'|'USER'
 }
 
 const UserSchema = new Schema({

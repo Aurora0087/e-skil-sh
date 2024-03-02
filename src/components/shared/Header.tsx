@@ -21,8 +21,6 @@ export const navItem = [
 
 async function Header() {
   const session = await auth()
-
-  console.log(session?.user.id)
   return (
     <header className=' relative flex justify-between items-center font-semibold w-screen p-4 px-6 blur-0 border-b border-white/10 text-white z-20'>
       <div className='grid place-content-center text-3xl'>
