@@ -20,12 +20,18 @@ const formSchema = z.object({
     title: z.string().min(2, {
         message: "Title must be at least 2 characters.",
     }),
-    describe: z.string().min(2, {
-        message: "Describe must be at least 2 characters.",
-    }),
+    description: z.string()
+        .min(2, {
+        message: "Description must be at least 2 characters.",
+        })
+        .max(5000, {
+        message: "Description must be ander 5000 characters."
+    })
+    ,
     imageUrl: z.string(),
     videoUrl: z.string(),
     categoryId: z.string(),
+    price: z.number(),
 })
 
 
@@ -42,10 +48,11 @@ function VideoUploaderForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
-            describe: "",
+            description: "",
             imageUrl: "",
             videoUrl: "",
             categoryId: "",
+            price: 0,
         },
     })
 
@@ -63,7 +70,7 @@ function VideoUploaderForm() {
 
         if (uploadImageUrl.length > 0 && uploadVideoUrl.length > 0) {
 
-            const uploadFiles = await startUpload([imagefiles[0],videoFiles[0]])
+            const uploadFiles = await startUpload([imagefiles[0], videoFiles[0]])
 
             if (!uploadFiles) {
                 return
@@ -71,7 +78,7 @@ function VideoUploaderForm() {
 
             uploadImageUrl = uploadFiles[0].url
             uploadVideoUrl = uploadFiles[1].url
-            console.table([uploadImageUrl,uploadVideoUrl])
+            console.table([uploadImageUrl, uploadVideoUrl])
         }
     }
     return (
@@ -79,47 +86,53 @@ function VideoUploaderForm() {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <div className="flex flex-col gap-4">
-                        <FormField
-                            control={form.control}
-                            name="title"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className=" text-2xl">Title</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} className=" text-black font-semibold" />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your public display Title for your video.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="categoryId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <CatagoryDropDown value={field.value} onChangeHandeler={field.onChange} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="describe"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className=" text-2xl">Describe</FormLabel>
-                                    <FormControl>
-                                        <Textarea {...field} className=" text-black" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <div className=" grid md:grid-cols-2 gap-4 h-fit">
+                            <div className=" h-full flex gap-4 flex-col">
+                                <FormField
+                                    control={form.control}
+                                    name="title"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className=" text-2xl">Title</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} className=" text-black font-semibold" />
+                                            </FormControl>
+                                            <FormDescription>
+                                                This is your public display Title for your video.
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="categoryId"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <CatagoryDropDown value={field.value} onChangeHandeler={field.onChange} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem className=" w-full h-full flex flex-col">
+                                        <FormLabel className=" text-2xl">Describe</FormLabel>
+                                        <FormControl>
+                                            <Textarea {...field} className=" text-black flex flex-grow" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
                         <FormField
                             control={form.control}
                             name="imageUrl"
@@ -149,6 +162,21 @@ function VideoUploaderForm() {
                                             fileUrl={field.value}
                                             setFiles={setVideoFiles}
                                             fileType='video' />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="price"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className=" text-2xl">Price</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" placeholder="₹ price" {...field}
+                                            className=" text-black"
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

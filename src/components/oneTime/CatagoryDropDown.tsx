@@ -58,11 +58,11 @@ function CatagoryDropDown({ onChangeHandeler, value }: DropdownProps) {
             <SelectTrigger className="w-full text-slate-800">
                 <SelectValue placeholder="Select Category" className='' />
             </SelectTrigger>
-            <SelectContent className=''>
+            <SelectContent className=' border-b border-slate-500/50'>
                 {
                     catagorys.length > 0 && catagorys.map((catagory) => (
                         <SelectItem
-                            className=' text-black font-semibold border-b'
+                            className=' text-black font-semibold border-b border-blue-500/50'
                             key={catagory.id} value={catagory._id}>{catagory.name}</SelectItem>
                     ))
                 }
